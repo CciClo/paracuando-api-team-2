@@ -11,11 +11,18 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()    
     try {
-      const adminUser = await usersService.findUserByEmailOr404('example@academlo.com')
+      const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
+      const adminUser2 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole = await rolesService.findRoleByName('admin')
       const profiles = [
         {
-          user_id: adminUser.id,
+          user_id1: adminUser1.id,
+          role_id: adminRole.id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        } ,
+        {
+          user_id2: adminUser2.id,
           role_id: adminRole.id,
           created_at: new Date(),
           updated_at: new Date(),
@@ -34,7 +41,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
 
     try {
-      const adminUser = await usersService.findUserByEmailOr404('example@academlo.com')
+      const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
       
       await queryInterface.bulkDelete('profiles', {
