@@ -55,7 +55,7 @@ app.get('/', ({ res }) => {
 /*
 Routes
 */
-routerModels(app)
+routerModels(app, PORT)
 routerErrorHandler(app)
 
 app.listen(PORT, () => {

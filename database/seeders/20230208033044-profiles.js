@@ -13,7 +13,7 @@ module.exports = {
     try {
       const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+      const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
       const profiles = [
         {
           user_id: adminUser1.id,
@@ -43,7 +43,7 @@ module.exports = {
     try {
       const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+      const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
       
       await queryInterface.bulkDelete('profiles', {
         user_id: {
