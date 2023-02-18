@@ -12,17 +12,17 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()    
     try {
       const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
-      const adminUser2 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole = await rolesService.findRoleByName('admin')
+      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
       const profiles = [
         {
-          user_id1: adminUser1.id,
+          user_id: adminUser1.id,
           role_id: adminRole.id,
           created_at: new Date(),
           updated_at: new Date(),
         } ,
         {
-          user_id2: adminUser2.id,
+          user_id: adminUser2.id,
           role_id: adminRole.id,
           created_at: new Date(),
           updated_at: new Date(),
@@ -43,6 +43,7 @@ module.exports = {
     try {
       const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
+      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
       
       await queryInterface.bulkDelete('profiles', {
         user_id: {
@@ -52,6 +53,16 @@ module.exports = {
           [Op.and]:[adminRole.id]
         }
       }, { transaction })
+
+      await queryInterface.bulkDelete('profiles', {
+        user_id: {
+          [Op.and]: [adminUser2.id]
+        },
+        role_id:{
+          [Op.and]:[adminRole.id]
+        }
+      }, { transaction })
+
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()
