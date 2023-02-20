@@ -7,12 +7,15 @@ const swaggerDocs = require('../swagger')
 
 const routesAuth = require('./auth.routes')
 const routesUsers = require('./users.routes')
-function routerModels(app, PORT) {
+const routesPublicationsTypes = require('./publicationsTypes.routes')
+
+function routerModels(app) {
   const router = express.Router()
 
   app.use('/api/v1', router)
   router.use('/auth', routesAuth)
   router.use('/users', routesUsers)
+  router.use('/publications-types', routesPublicationsTypes)
   swaggerDocs(router, PORT)
 }
 

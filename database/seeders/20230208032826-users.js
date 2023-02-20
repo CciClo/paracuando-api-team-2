@@ -29,6 +29,16 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id: uuid.v4(),
+        first_name: 'User',
+        last_name: 'Public',
+        email: 'example2@academlo.com',
+        username: 'example2@academlo.com',
+        password: hashPassword('12345678910'),
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]
 
     try {
@@ -46,7 +56,12 @@ module.exports = {
 
     const userNames = [
       'tato.tandioy@gmail.com',
+<<<<<<< HEAD
       'engriendonos@gmail.com',
+=======
+      'example@academlo.com',
+      'example2@academlo.com',
+>>>>>>> 43dddee6ee50e2461ec8996d47f3a18ffd9b533f
     ]
 
     try {
