@@ -1,14 +1,39 @@
 'use strict';
 const UsersService = require('../services/users.service');
+const { getPagination, getPagingData, CustomError } = require('../utils/helpers');
 
 
 const usersService = new UsersService()
 
+const getAllUserAdmin = async (request, response, next) => {
+  try {
+    let query = request.query;
+    const {page, size} = query;
+    const {limit, offset} = getPagination(page, size, '10');
+
+    query.limit = limit;
+    query.offset = offset;
+    
+    let users = await usersService.findAndCount(query)
+    const results = getPagingData(users,page,limit)
+
+    return response.json({results: results})
+    // response.json(request.user)
+  } catch (error) {
+    next(error);
+  }
+}
+
 const findUserById = async (request, response, next) => {
   try {
     let { id } = request.params;
-    let user = await usersService.getUser(id);
-    return response.status(200).json({results: user});
+    const user = request.user;
+    if (user.isSameUser || user.isAdmin){
+      let foundUser = await usersService.getSameUser(id);
+      return response.json(foundUser);
+    }
+    let foundUser = await usersService.getPublicUser(id);
+    return response.json(foundUser);
   } catch (error) {
     next(error);
   }
@@ -16,14 +41,22 @@ const findUserById = async (request, response, next) => {
 
 const updateUserById = async ( request, response, next) => {
   try {
-    const { id } = request.params
-    response.json({message: 'esta es update'})
+    const {isSameUser} = request.user;
+    if ( isSameUser ) {
+      const { id } = request.params;
+      const { body } = request;
+      let user = await usersService.updateUser(id,body);
+      return response.json({results: user});
+      // return console.log(request.user);
+    }
+    throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized');
   } catch (error) {
     next(error)
   }
 };
 
 module.exports = {
+  getAllUserAdmin,
   findUserById,
   updateUserById
 };
