@@ -14,6 +14,9 @@ module.exports = {
       const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
       const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+      const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
+      const adminRole2 = await rolesService.findRoleByName('public')
+
       const profiles = [
         {
           user_id: adminUser1.id,
@@ -24,6 +27,12 @@ module.exports = {
         {
           user_id: adminUser2.id,
           role_id: adminRole.id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        } ,
+        {
+          user_id: adminUser3.id,
+          role_id: adminRole2.id,
           created_at: new Date(),
           updated_at: new Date(),
         } 
@@ -44,7 +53,9 @@ module.exports = {
       const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
       const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
-      
+      const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
+      const adminRole2 = await rolesService.findRoleByName('public')
+
       await queryInterface.bulkDelete('profiles', {
         user_id: {
           [Op.and]: [adminUser.id]
@@ -60,6 +71,16 @@ module.exports = {
         },
         role_id:{
           [Op.and]:[adminRole.id]
+        }
+      }, { transaction })
+
+
+      await queryInterface.bulkDelete('profiles', {
+        user_id: {
+          [Op.and]: [adminUser3.id]
+        },
+        role_id:{
+          [Op.and]:[adminRole2.id]
         }
       }, { transaction })
 

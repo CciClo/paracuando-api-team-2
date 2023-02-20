@@ -64,6 +64,18 @@ class UsersService {
     return user
   }
 
+  async getPublicUser(id) {
+    let user = await models.Users.scope('view_public').findByPk(id, {raw: true});
+    if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    return user;
+  }
+
+  async getSameUser(id) {
+    let user = await models.Users.scope('view_same_user').findByPk(id, {raw: true});
+    if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    return user;
+  }
+
   async getUser(id) {
     let user = await models.Users.findByPk(id)
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
