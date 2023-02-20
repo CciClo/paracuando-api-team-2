@@ -13,14 +13,11 @@ module.exports = {
     try {
       const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-<<<<<<< HEAD
+
       const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
-=======
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
       const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole2 = await rolesService.findRoleByName('public')
 
->>>>>>> 43dddee6ee50e2461ec8996d47f3a18ffd9b533f
       const profiles = [
         {
           user_id: adminUser1.id,
@@ -56,15 +53,12 @@ module.exports = {
     try {
       const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-<<<<<<< HEAD
+
       const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
-      
-=======
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+
       const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole2 = await rolesService.findRoleByName('public')
 
->>>>>>> 43dddee6ee50e2461ec8996d47f3a18ffd9b533f
       await queryInterface.bulkDelete('profiles', {
         user_id: {
           [Op.and]: [adminUser.id]

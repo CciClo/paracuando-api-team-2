@@ -56,12 +56,12 @@ module.exports = {
 
     const userNames = [
       'tato.tandioy@gmail.com',
-<<<<<<< HEAD
+
       'engriendonos@gmail.com',
-=======
+
       'example@academlo.com',
       'example2@academlo.com',
->>>>>>> 43dddee6ee50e2461ec8996d47f3a18ffd9b533f
+
     ]
 
     try {
