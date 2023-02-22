@@ -13,7 +13,8 @@ module.exports = {
     try {
       const adminUser1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+
+      const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
       const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole2 = await rolesService.findRoleByName('public')
 
@@ -52,7 +53,9 @@ module.exports = {
     try {
       const adminUser = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com')
       const adminRole = await rolesService.findRoleByName('admin')
-      const adminUser2 = await usersService.findUserByEmailOr404('example@academlo.com')
+
+      const adminUser2 = await usersService.findUserByEmailOr404('engriendonos@gmail.com')
+
       const adminUser3 = await usersService.findUserByEmailOr404('example2@academlo.com')
       const adminRole2 = await rolesService.findRoleByName('public')
 
