@@ -42,11 +42,11 @@ const findUserById = async (request, response, next) => {
 const updateUserById = async ( request, response, next) => {
   try {
     const {isSameUser} = request.user;
+    const { id } = request.params;
+    const { body } = request;
     if ( isSameUser ) {
-      const { id } = request.params;
-      const { body } = request;
       let user = await usersService.updateUser(id,body);
-      return response.json({results: user});
+      return response.json({results: {message: 'Succes Update'}});
       // return console.log(request.user);
     }
     throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized');
