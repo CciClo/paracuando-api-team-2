@@ -5,7 +5,7 @@ require("dotenv").config();
 const options = {
     apis: [
       "./docs/routesDocs/auth.docs.js", "./docs/routesDocs/user.docs.js",
-      "./docs/schemas/userModel.schema.js"],
+      "./docs/schemas/userModel.schema.js", "./docs/schemas/profileModel.schema.js"],
     definition: {
         openapi: "3.0.0",
         info: {

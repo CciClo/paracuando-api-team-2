@@ -2,20 +2,16 @@
  * @openapi
  * /api/v1/users:
  *   get:
- *     summary: Only for Administrators
+ *     summary: Only users for Administrators
  *     tags:
  *       - User
  *     responses:
  *       200:
- *         description: Through the queries params they will receive their model fields so that it can be filtered, including the created_at
+ *         description: Ok
  *         content:
  *           application/json:
- *           schema:
- *             type: object
- *             properties:
- *               message:
- *                 type: string
- *                 example: example example here
+ *             schema:
+ *               $ref: '#/components/schema/get-all'
  * /api/v1/users/{id}:
  *   get:
  *     tags:
@@ -26,7 +22,7 @@
  *      content:
  *        application/json:
  *          schema: 
- *            $ref: '#/components/schema/login'
+ *            $ref: '#/components/schema/get-user-by-id'
  *     responses:
  *       200:
  *         description: Ok
@@ -112,5 +108,11 @@
  *                 message:
  *                   type: string
  *                   example: Not Found id publications
+ * paths:
+ *   /api/v1/users/{id}:
+ *     put:
+ *       tags:
+ *         - User
+ * 
  */
 

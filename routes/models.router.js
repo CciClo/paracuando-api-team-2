@@ -9,7 +9,7 @@ const routesAuth = require('./auth.routes')
 const routesUsers = require('./users.routes')
 const routesPublicationsTypes = require('./publicationsTypes.routes')
 
-function routerModels(app) {
+function routerModels(app, PORT) {
   const router = express.Router()
 
   app.use('/api/v1', router)
