@@ -12,11 +12,25 @@ module.exports = {
       const publicationTypes = [
         {
           id: uuid.v4(),
-          name :'Video games',
-          description: 'All kinds of video games in general',
+          name :'Marcas y tiendas',
+          // description: 'All kinds of video games in general',
           created_at: new Date(),
           updated_at: new Date(),
-        }
+        },
+        {
+          id: uuid.v4(),
+          name :'Artistas y conciertos',
+          // description: 'All kinds of video games in general',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          id: uuid.v4(),
+          name :'Torneos',
+          // description: 'All kinds of video games in general',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ]
       await queryInterface.bulkInsert('publications_types', publicationTypes, {transaction})
       await transaction.commit()
@@ -31,7 +45,9 @@ module.exports = {
     
     try {
       const publicationsTypes = [
-        'Video games'
+        'Marcas y tiendas',
+        'Artistas y conciertos',
+        'Torneos',
       ]
       
       await queryInterface.bulkDelete(

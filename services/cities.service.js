@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const models = require('../database/models');
 const { CustomError } = require('../utils/helpers');
 
-class StatesService {
+class CitiesService {
   constructor() {
   }
 
@@ -28,19 +28,14 @@ class StatesService {
       options.where.name = { [Op.iLike]: `%${name}%` }
     }
 
-    //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
 
-    const states = await models.States.findAndCountAll(options)
+    const states = await models.Cities.findAndCountAll(options)
     return states
   }
 
-  async getStateByName(name) {
-    let state = await models.States.findOne({where: {name}});
-    if (!state) throw new CustomError('not found state', 404, 'not found')
-    return state
-  }
+
 
 }
 
-module.exports = StatesService;
+module.exports = CitiesService;
