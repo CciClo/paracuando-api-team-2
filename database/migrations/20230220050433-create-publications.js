@@ -9,26 +9,33 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         type: Sequelize.UUID
       },
-      profile_id: {
+      user_id: {
         type: Sequelize.BIGINT,
         references: {
-          model: 'profiles',
+          model: 'users',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       publication_type_id: {
         type: Sequelize.UUID,
         references: {
           model: 'publications_types',
-          key: 'id'
-        }
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       city_id: {
         type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'cities',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       title: {
         type: Sequelize.STRING

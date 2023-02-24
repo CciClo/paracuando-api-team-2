@@ -10,18 +10,24 @@ module.exports = {
         type: Sequelize.UUID
       },
       publication_id: {
+        foreignKey: true,
         type: Sequelize.UUID,
         references: {
           model: 'publications',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       user_id: {
         type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'users',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       created_at: {
         allowNull: false,

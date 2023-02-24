@@ -11,10 +11,13 @@ module.exports = {
       },
       country_id: {
         type: Sequelize.BIGINT,
+        foreignKey: true,
         references: {
           model: 'countries',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       name: {
         type: Sequelize.STRING
