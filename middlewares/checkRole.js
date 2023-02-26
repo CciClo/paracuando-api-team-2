@@ -13,10 +13,11 @@ const checkRole = async (request, response, next) => {
     const {role_id:roleIdInProfile} = await profilesService.findProfileByUserID(user.id);
 
     if (roleId === roleIdInProfile && user.isUrlPublic) {
-      return true
+      user.isAdmin = true
+      return next()
     }
     else if (user.isUrlPublic) {
-      return false
+      return next()
     }
     else if ( roleId === roleIdInProfile && ! user.isUrlPublic ) {
       return next();

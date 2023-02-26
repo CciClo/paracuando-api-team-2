@@ -10,11 +10,18 @@ module.exports = {
       const states = [
         {
           id: uuid.v4(),
-          country_id : 1,
-          name: 'Estado de prueba',
+          country_id : 2,
+          name: 'Cundinamarca',
           created_at: new Date(),
           updated_at: new Date(),
-        }
+        },
+        {
+          id: uuid.v4(),
+          country_id : 1,
+          name: 'Cusco',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ]
       await queryInterface.bulkInsert('states', states, {transaction})
       await transaction.commit()

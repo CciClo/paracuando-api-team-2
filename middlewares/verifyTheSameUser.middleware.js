@@ -7,18 +7,8 @@ const verifyTheSameUser = async ( request, response, next ) => {
     user.isUrlPublic = true
     if ( user.id === id ) {
       user.isSameUser = true
-      const isAdmin = await checkRole(request, response, next);
-      if (isAdmin) {
-        user.isAdmin = true
-        return next();
-      }
-      return next();
     }
-    const isAdmin = await checkRole(request, response, next);
-    if (isAdmin) {
-      user.isAdmin = true
-      return next();
-    }
+    
     return next();
   } catch (error) {
     next(error)

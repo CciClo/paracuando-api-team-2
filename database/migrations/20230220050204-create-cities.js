@@ -11,10 +11,13 @@ module.exports = {
       },
       state_id: {
         type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'states',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       name: {
         type: Sequelize.STRING

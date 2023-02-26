@@ -11,16 +11,24 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     
     try {
-      const state = await statesService.getStateByName('Estado de prueba')
+      const state1 = await statesService.getStateByName('Cundinamarca')
+      const state2 = await statesService.getStateByName('Cusco')
 
       const cities = [
         {
           id: uuid.v4(),
-          state_id: state.id,
-          name :'Test City',
+          state_id: state1.id,
+          name :'Bogota',
           created_at: new Date(),
           updated_at: new Date(),
-        }
+        },
+        {
+          id: uuid.v4(),
+          state_id: state2.id,
+          name :'Cusco',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ]
       await queryInterface.bulkInsert('cities', cities, {transaction})
       await transaction.commit()
@@ -34,7 +42,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
 
     const cities = [
-      'Test City'
+      'Bogota',
+      'Cusco'
     ]
 
     try {

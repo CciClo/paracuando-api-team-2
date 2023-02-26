@@ -58,8 +58,6 @@ module.exports = {
       'tato.tandioy@gmail.com',
 
       'engriendonos@gmail.com',
-
-      'example@academlo.com',
       'example2@academlo.com',
 
     ]
