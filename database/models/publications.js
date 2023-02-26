@@ -45,12 +45,6 @@ module.exports = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.TEXT,
     },
-    picture: {
-      type: DataTypes.STRING
-    },
-    image_url: {
-      type: DataTypes.STRING,
-    }
   }, {
     sequelize,
     modelName: 'Publications',
