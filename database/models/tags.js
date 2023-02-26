@@ -11,13 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Tags.hasMany(models.PublicationsTags, {as: 'publications', foreignKey: 'tag_id'})
+      Tags.hasMany(models.PublicationsTags, {as: 'publications', foreignKey: 'tag_id'})
       // Tags.hasMany(models.UsersTgs, {as: 'users', foreignKey: 'tag_id'})
     }
   }
   Tags.init({
     id:{
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true
     },
     name: {
