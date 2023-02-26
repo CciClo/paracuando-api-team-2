@@ -16,7 +16,13 @@ module.exports = {
           name: 'Peru', /// cambiar al pais
           created_at: new Date(),
           updated_at: new Date()
-        }
+        },
+        {
+          id: '2',
+          name: 'Colombia',
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ], { transaction })
 
       await transaction.commit()
@@ -29,9 +35,14 @@ module.exports = {
   async down(queryInterface, /*Sequelize*/) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
+      const countries = [
+        'Peru',
+        'Colombia',
+      ]
+
       await queryInterface.bulkDelete('countries', {
         name: {
-          [Op.or]: ['Peru']
+          [Op.or]: [countries]
         }
       }, { transaction })
       await transaction.commit()

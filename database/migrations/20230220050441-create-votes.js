@@ -10,8 +10,8 @@ module.exports = {
         type: Sequelize.UUID
       },
       publication_id: {
-        foreignKey: true,
         type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'publications',
           key: 'id'

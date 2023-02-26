@@ -34,6 +34,11 @@ class CitiesService {
     return states
   }
 
+  async getCityByName (name) {
+    const result = await models.Cities.findOne({where: {name}});
+    if(!result) throw new  CustomError('Not found city ', 404, 'Not found');
+    return result;
+  }
 
 
 }

@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.UUID
       },
       user_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'users',
           key: 'id'
@@ -20,6 +21,7 @@ module.exports = {
       },
       publication_type_id: {
         type: Sequelize.UUID,
+        foreignKey: true,
         references: {
           model: 'publications_types',
           key: 'id',

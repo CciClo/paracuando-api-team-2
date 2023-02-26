@@ -31,6 +31,13 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          id: uuid.v4(),
+          name :'Videos Games',
+          // description: 'All kinds of video games in general',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ]
       await queryInterface.bulkInsert('publications_types', publicationTypes, {transaction})
       await transaction.commit()
