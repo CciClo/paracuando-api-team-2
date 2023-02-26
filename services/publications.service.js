@@ -31,9 +31,31 @@ class PublicationsServices {
     options.distinct = true
     options.include =[
       {model: models.Users, as:'author', attributes: ['id', 'first_name']},
-      {model: models.Cities, as:'cities'},
-      {model: models.Votes, as:'votes_'},
-      {model: models.Publications_types, as:'publication_type'},
+      {
+        model: models.Cities, 
+        as:'cities',
+        attributes: { exclude: ['created_at', 'updated_at']}
+      },
+      {
+        model: models.Votes, 
+        as:'votes',
+        include: {
+          model: models.Users, as: 'user', attributes: ['id', 'first_name']
+        }
+      },
+      {
+        model: models.Publications_types, 
+        as:'publication_type',
+        attributes: ['id', 'name']
+      },
+      {
+        model: models.PublicationsTags,
+        as: 'tags',
+        include: {
+          model: models.Tags,
+          as: 'tag'
+        }
+      },
     ]
     
     const publications = await models.Publications.scope('view_public').findAndCountAll(options);
