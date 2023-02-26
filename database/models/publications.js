@@ -1,4 +1,5 @@
 'use strict';
+const model = require('./index')
 const {
   Model
 } = require('sequelize');
@@ -52,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     timestamps: true,
     scopes: {
-      view_public: {attributes: ['id','title', 'description']},
+      view_public: {attributes: {exclude: ['content', 'city_id', 'publication_type_id', 'user_id' ]},},
     }
   });
   return Publications;
