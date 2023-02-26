@@ -13,6 +13,7 @@ const routesCities = require('./cities.routes')
 const routesRoles = require('./roles.routes')
 const routesTags = require('./tags.routes')
 const routesPublicationsTypes = require('./publicationsTypes.routes')
+const routesPublications = require('./publications.routes')
 
 function routerModels(app, PORT) {
   const router = express.Router()
@@ -26,6 +27,7 @@ function routerModels(app, PORT) {
   router.use('/cities', routesCities)
   router.use('/roles', routesRoles)
   router.use('/tags', routesTags)
+  router.use('/publications', routesPublications)
   swaggerDocs(router, PORT)
 }
 
