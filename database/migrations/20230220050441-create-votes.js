@@ -16,8 +16,8 @@ module.exports = {
           model: 'publications',
           key: 'id'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
+        // onUpdate: 'CASCADE',
+        // onDelete: 'RESTRICT',
       },
       user_id: {
         type: Sequelize.UUID,
@@ -26,8 +26,8 @@ module.exports = {
           model: 'users',
           key: 'id'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
+        // onUpdate: 'CASCADE',
+        // onDelete: 'RESTRICT',
       },
       created_at: {
         allowNull: false,
