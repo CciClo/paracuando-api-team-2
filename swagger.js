@@ -11,6 +11,8 @@ const options = {
     './docs/routesDocs/cities.docs.js','./docs/schemas/cities.schema.js',
     './docs/routesDocs/states.docs.js','./docs/schemas/states.schema.js',
     './docs/routesDocs/roles.docs.js','./docs/schemas/roles.schema.js',
+    './docs/routesDocs/tags.docs.js','./docs/schemas/tags.schema.js',
+    './docs/routesDocs/publications.docs.js','./docs/schemas/publications.schema.js',
     './docs/schemas/profileModel.schema.js',
   ],
   definition: {
