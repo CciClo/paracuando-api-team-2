@@ -78,6 +78,13 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        name: 'Video Games',
+        description: 'A series of events involving exposure to one or more hazards.',
+        // image_url: 'http://image_url',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]
 
     try {
