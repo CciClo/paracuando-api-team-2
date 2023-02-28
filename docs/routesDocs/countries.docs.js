@@ -4,7 +4,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Only users for Administrators
+ *     summary: For all tokenized users
  *     tags:
  *       - Countries
  *     parameters:

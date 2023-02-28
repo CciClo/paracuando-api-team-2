@@ -23,11 +23,6 @@ class PublicationsServices {
       include: [
         { model: models.Users, as: 'user', attributes: ['id', 'first_name'] },
         {
-          model: models.Publications_types,
-          as: 'publication_type',
-          attributes: ['id', 'name']
-        },
-        {
           model: models.PublicationsTags,
           as: 'tags',
           attributes: ['id'],
@@ -133,14 +128,14 @@ class PublicationsServices {
             // include: {
             //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
             // }
-            attributes: [
-              [literal(`(
-                SELECT COUNT(*)
-                FROM "votes" v 
-                WHERE v."publication_id" = "Publications"."id"
-              )`), 'count'],
-              'id','publication_id','user_id'
-            ]
+            // attributes: [
+            //   [literal(`(
+            //     SELECT COUNT(*)
+            //     FROM "votes" v 
+            //     WHERE v."publication_id" = "Publications"."id"
+            //   )`), 'count'],
+            //   'id','publication_id','user_id'
+            // ]
           },
         ]
       }
