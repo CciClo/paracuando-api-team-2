@@ -71,7 +71,7 @@
  *                   type: string
  *                   example: Apellido
  *                 country_id:
- *                   type: integer
+ *                   type: string
  *                   example: 1
  *       responses:
  *         200:
