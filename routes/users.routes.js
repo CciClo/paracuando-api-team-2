@@ -4,6 +4,8 @@ const { findUserById, updateUserById, getAllUserAdmin } = require('../controller
 const { checkRole } = require('../middlewares/checkRole');
 const { verifyTheSameUser } = require('../middlewares/verifyTheSameUser.middleware');
 const router = express.Router();
+const verifySchema = require('../schemas/joiSchema.checker');
+const { updatedUserSchema } = require('../schemas/users.schemas');
 
 
 router.get('/',
@@ -23,6 +25,7 @@ router.get('/:id',
 router.put('/:id', 
   passport.authenticate('jwt', {session: false}),
   verifyTheSameUser,
+  verifySchema(updatedUserSchema, 'body'),
   updateUserById
 );
 
