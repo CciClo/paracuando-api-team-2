@@ -8,6 +8,19 @@
  *       summary: For administrators only
  *       tags:
  *         - User
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           type: integer
+ *           example: 1
+ *         - in: query
+ *           name: size
+ *           type: integer
+ *           example: 2
+ *         - in: query
+ *           name: created_at
+ *           type: string
+ *           example: 2023-02-27T22:06:54.904Z
  *       responses:
  *         200:
  *           description: Ok
