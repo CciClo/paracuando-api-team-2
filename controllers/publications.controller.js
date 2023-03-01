@@ -11,7 +11,7 @@ const getAllPublications = async (request, response, next) => {
   
     query.limit = limit;
     query.offset = offset;
-    const publications = await publicationsService.getAllPublications(query);
+    const publications = await publicationsService.findAndCount(query);
     const results = getPagingData(publications,page,limit)
     response.json({results})
   } catch (error) {

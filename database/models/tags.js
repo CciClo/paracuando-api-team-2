@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Tags extends Model {
     /**
@@ -11,37 +9,46 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tags.hasMany(models.PublicationsTags, {as: 'publications', foreignKey: 'tag_id'})
-      // Tags.hasMany(models.UsersTgs, {as: 'users', foreignKey: 'tag_id'})
+      Tags.hasMany(models.PublicationsTags, {
+        as: "publications",
+        foreignKey: "tag_id",
+      });
+      Tags.hasMany(models.UsersTags, {
+        as: "users",
+        foreignKey: "tag_id",
+      });
     }
   }
-  Tags.init({
-    id:{
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+  Tags.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        // allowNull: false
+      },
+      image_url: {
+        type: DataTypes.STRING,
+        // allowNull: false
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.STRING,
-      // allowNull: false
-    },
-    image_url: {
-      type: DataTypes.STRING,
-      // allowNull: false
+    {
+      sequelize,
+      modelName: "Tags",
+      tableName: "tags",
+      underscored: true,
+      timestamps: true,
+      scopes: {
+        view_public: { attributes: ["id", "name", "image_url"] },
+      },
     }
-  }, {
-    sequelize,
-    modelName: 'Tags',
-    tableName: 'tags',
-    underscored: true,
-    timestamps: true,
-    scopes: {
-      view_public: {attributes: ['id', 'name', 'image_url']}
-    }
-  });
+  );
   return Tags;
 };

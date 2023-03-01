@@ -11,7 +11,7 @@ const votesService = new VotesServices()
 class PublicationsServices {
   constructor() { }
 
-  async getAllPublications(query) {
+  async findAndCount(query) {
 
     const options = {
       where: {},
@@ -46,9 +46,19 @@ class PublicationsServices {
       options.where.id = id
     }
 
-    const { name } = query
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` }
+    const { user_id } = query
+    if (user_id) {
+      options.where.user_id = user_id
+    }
+
+    const { title } = query
+    if (title) {
+      options.where.title = { [Op.iLike]: `%${title}%` }
+    }
+
+    const { created_at } = query;
+    if (created_at) {
+      options.where.created_at = { [Op.iLike]: `%${created_at}%` };
     }
 
     options.distinct = true
