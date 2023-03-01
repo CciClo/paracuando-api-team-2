@@ -1,18 +1,22 @@
-"use strict";
-const UsersService = require("../services/users.service");
+'use strict';
+const PublicationsServices = require('../services/publications.service');
+const UsersService = require('../services/users.service');
+const VotesServices = require('../services/votes.service');
 const {
   getPagination,
   getPagingData,
   CustomError,
-} = require("../utils/helpers");
+} = require('../utils/helpers');
 
+const votesService = new VotesServices();
+const publicationsService = new PublicationsServices();
 const usersService = new UsersService();
 
 const getAllUserAdmin = async (request, response, next) => {
   try {
     let query = request.query;
     const { page, size } = query;
-    const { limit, offset } = getPagination(page, size, "10");
+    const { limit, offset } = getPagination(page, size, '10');
 
     query.limit = limit;
     query.offset = offset;
@@ -49,13 +53,13 @@ const updateUserById = async (request, response, next) => {
     const { body } = request;
     if (isSameUser) {
       let user = await usersService.updateUser(id, body);
-      return response.json({ results: { message: "Succes Update" } });
+      return response.json({ results: { message: 'Succes Update' } });
       // return console.log(request.user);
     }
     throw new CustomError(
-      "You are not authorized to make changes to this user",
+      'You are not authorized to make changes to this user',
       403,
-      "Unauthorized"
+      'Unauthorized'
     );
   } catch (error) {
     next(error);
@@ -66,13 +70,13 @@ const getUserAllVotes = async (request, response, next) => {
   try {
     let query = request.query;
     const { page, size } = query;
-    const { limit, offset } = getPagination(page, size, "10");
+    const { limit, offset } = getPagination(page, size, '10');
 
     query.limit = limit;
     query.offset = offset;
     const { id } = request.params;
     query.user_id = id;
-    const result = await usersService.allVotesId(query);
+    const result = await votesService.findAndCount(query);
     const results = getPagingData(result, page, limit);
     response.json({ results });
   } catch (error) {
@@ -80,17 +84,17 @@ const getUserAllVotes = async (request, response, next) => {
   }
 };
 
-const getUserPublications = async (request, response, next) => {
+const getUserAllPublications = async (request, response, next) => {
   try {
     let query = request.query;
     const { page, size } = query;
-    const { limit, offset } = getPagination(page, size, "10");
+    const { limit, offset } = getPagination(page, size, '10');
 
     query.limit = limit;
     query.offset = offset;
     const { id } = request.params;
     query.user_id = id;
-    const result = await usersService.allPublicationsId(query);
+    const result = await publicationsService.findAndCount(query);
     const results = getPagingData(result, page, limit);
     response.json({ results });
   } catch (error) {
@@ -103,4 +107,5 @@ module.exports = {
   findUserById,
   updateUserById,
   getUserAllVotes,
+  getUserAllPublications,
 };
