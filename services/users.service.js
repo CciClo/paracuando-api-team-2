@@ -244,4 +244,26 @@ class UsersService {
   }
 }
 
+async allPublicationsId(query) {
+    const options = {
+      where: {},
+    };
+
+    const { limit, offset } = query;
+    if (limit && offset) {
+      options.limit = limit;
+      options.offset = offset;
+    }
+
+    const { user_id } = query;
+    if (user_id) {
+      options.where.user_id = user_id;
+    }
+
+    //Necesario para el findAndCountAll de Sequelize
+    options.distinct = true;
+
+    const users = await models.Publications.findAndCountAll(options);
+    return users;
+  }
 module.exports = UsersService;

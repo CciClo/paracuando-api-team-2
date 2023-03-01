@@ -80,6 +80,24 @@ const getUserAllVotes = async (request, response, next) => {
   }
 };
 
+const getUserPublications = async (request, response, next) => {
+  try {
+    let query = request.query;
+    const { page, size } = query;
+    const { limit, offset } = getPagination(page, size, "10");
+
+    query.limit = limit;
+    query.offset = offset;
+    const { id } = request.params;
+    query.user_id = id;
+    const result = await usersService.allPublicationsId(query);
+    const results = getPagingData(result, page, limit);
+    response.json({ results });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllUserAdmin,
   findUserById,

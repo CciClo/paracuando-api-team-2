@@ -6,6 +6,7 @@ const {
   getAllUserAdmin,
   getUserAllVotes,
 } = require("../controllers/users.controller");
+const { createUserTag } = require("../controllers/usersTags.controller");
 const { checkRole } = require("../middlewares/checkRole");
 const {
   verifyTheSameUser,
@@ -39,8 +40,20 @@ router.put(
 
 router.get(
   "/:id/votes",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   getUserAllVotes
+);
+
+router.post(
+  "/:id/add-interest",
+  passport.authenticate("jwt", { session: false }),
+  createUserTag
+);
+
+router.delete(
+  "/:id/remove-interest",
+  passport.authenticate("jwt", { session: false }),
+  removeUserTag
 );
 
 module.exports = router;
