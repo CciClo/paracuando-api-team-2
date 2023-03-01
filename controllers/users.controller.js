@@ -71,8 +71,8 @@ const getUserAllVotes = async (request, response, next) => {
     query.limit = limit;
     query.offset = offset;
     const { id } = request.params;
-    query.id = id;
-    const result = await usersService.allVotesId(id, query);
+    query.user_id = id;
+    const result = await usersService.allVotesId(query);
     const results = getPagingData(result, page, limit);
     response.json({ results });
   } catch (error) {

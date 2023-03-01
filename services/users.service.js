@@ -23,9 +23,14 @@ class UsersService {
       options.where.id = id;
     }
 
-    const { name } = query;
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` };
+    const { first_name } = query;
+    if (first_name) {
+      options.where.first_name = { [Op.iLike]: `%${first_name}%` };
+    }
+
+    const { created_at } = query;
+    if (created_at) {
+      options.where.created_at = { [Op.iLike]: `%${created_at}%` };
     }
 
     //Necesario para el findAndCountAll de Sequelize
@@ -226,20 +231,15 @@ class UsersService {
       options.offset = offset;
     }
 
-    const { id } = query;
-    if (id) {
-      options.where.id = id;
-    }
-
-    const { name } = query;
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` };
+    const { user_id } = query;
+    if (user_id) {
+      options.where.user_id = user_id;
     }
 
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true;
 
-    const users = await models.Users.findAndCountAll(options);
+    const users = await models.Votes.findAndCountAll(options);
     return users;
   }
 }

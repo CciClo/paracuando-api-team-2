@@ -39,7 +39,7 @@ router.put(
 
 router.get(
   "/:id/votes",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   getUserAllVotes
 );
 
