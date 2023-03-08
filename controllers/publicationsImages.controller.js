@@ -1,4 +1,4 @@
-const ImagesPublicationsService = require('../services/images_publications.service')
+const ImagesPublicationsService = require('../services/publicationsImages.service')
 const fs = require('fs')
 const util = require('util')
 const uuid = require('uuid')
