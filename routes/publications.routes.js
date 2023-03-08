@@ -7,12 +7,13 @@ const { createPublicationSchema } = require('../schemas/publications.schemas');
 const { verifyTheSameUser } = require('../middlewares/verifyTheSameUser.middleware');
 const { checkRole } = require('../middlewares/checkRole');
 const { createVote } = require('../controllers/votes.controller');
+const { multerPublicationsPhotos } = require('../middlewares/multer.middleware');
 const router = express.Router();
 // passport.authenticate('jwt', { session: false }),
 
-router.get('/', getAllPublications); 
+router.get('/', getAllPublications);
 
-router.post('/', 
+router.post('/',
   passport.authenticate('jwt', { session: false }),
   verifySchema(createPublicationSchema, 'body'),
   createPublication,
@@ -27,7 +28,7 @@ router.delete('/:id',
   deletePublicationById
 );
 
-router.post('/:id/vote', 
+router.post('/:id/vote',
   passport.authenticate('jwt', { session: false }),
   createVote
 )
