@@ -7,7 +7,7 @@ module.exports = {
                 type: Sequelize.UUID,
                 foreignKey: true,
                 references: {
-                    model: 'publicaitions',
+                    model: 'publications',
                     key: 'id',
                 },
                 onUpdate: 'CASCADE',

@@ -6,40 +6,40 @@ const uuid = require('uuid')
 // const publicationsTipesService = new PublicationsTypesService();
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       const publicationTypes = [
         {
           id: uuid.v4(),
-          name :'Marcas y tiendas',
+          name: 'Marcas y tiendas',
           // description: 'All kinds of video games in general',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
           id: uuid.v4(),
-          name :'Artistas y conciertos',
+          name: 'Artistas y conciertos',
           // description: 'All kinds of video games in general',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
           id: uuid.v4(),
-          name :'Torneos',
+          name: 'Torneos',
           // description: 'All kinds of video games in general',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
           id: uuid.v4(),
-          name :'Videos Games',
+          name: 'Videos Games',
           // description: 'All kinds of video games in general',
           created_at: new Date(),
           updated_at: new Date(),
         },
       ]
-      await queryInterface.bulkInsert('publications_types', publicationTypes, {transaction})
+      await queryInterface.bulkInsert('publications_types', publicationTypes, { transaction })
       await transaction.commit()
     } catch (error) {
       await transaction.commit()
@@ -47,16 +47,16 @@ module.exports = {
     }
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
-    
+
     try {
       const publicationsTypes = [
         'Marcas y tiendas',
         'Artistas y conciertos',
-        'Torneos',
+        'Torneos', 'Videos Games',
       ]
-      
+
       await queryInterface.bulkDelete(
         'publications_types',
         {
@@ -64,7 +64,7 @@ module.exports = {
             [Op.or]: publicationsTypes
           }
         },
-        {transaction}
+        { transaction }
       )
 
       await transaction.commit();
