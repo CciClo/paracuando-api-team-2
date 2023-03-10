@@ -261,5 +261,48 @@
  *                   message:
  *                     type: string
  *                     example: Unable to complete Review fields
+ *   /api/v1/users/{id}/add-image:
+ *     post:
+ *       tags:
+ *         - User
+ *       parameters:
+ *         - in: path
+ *           name: image_url
+ *           type: string
+ *           example:
+ *       requestBody:
+ *         description: Images as form data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image_url:
+ *                   type: string
+ *                   example:
+ *   /api/v1/users/{id}/remove-image:
+ *     delete:
+ *       tags:
+ *         - User
+ *       requestBody:
+ *         description: I received the request that you want to rmeover the image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image-url:
+ *                   type: string
+ *                   example:
+ *         404:
+ *           description: Not Found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Not Found Image
  */
 
