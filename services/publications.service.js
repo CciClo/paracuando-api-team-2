@@ -1,6 +1,7 @@
 const { Op, cast, literal } = require('sequelize');
 const { v4: uuid4 } = require('uuid');
 const models = require('../database/models');
+const { getObjectSignedUrl } = require('../libs/aws3');
 const { CustomError } = require('../utils/helpers');
 const PublicationsTgsServices = require('./publicationsTags.service');
 const VotesServices = require('./votes.service');
@@ -31,6 +32,13 @@ class PublicationsServices {
             attributes: ['id', 'name']
           }
         },
+        {
+          model: models.PublicationsImages,
+          as: 'images',
+          attributes: {
+            exclude: 'id' // temporal exclude, deleted necessary
+          }
+        }
       ]
     }
 
@@ -64,6 +72,24 @@ class PublicationsServices {
 
     const publications = await models.Publications.scope('view_public').findAndCountAll(options);
     if (!publications) throw new CustomError('Not found publications', 404, 'not found')
+
+    await Promise.all(
+      publications.rows.map(async (publication, index) => {
+        for (let i = 0; i < publication['images'].length; i++) {
+          let imageURL = await getObjectSignedUrl(publication['images'][i].image_url);
+          publications.rows[index].images[i].image_url = imageURL
+        }
+      })
+    )
+    // publications.rows.map(async (publication, index) => {
+    //   for (let i = 0; i < publication['images'].length; i++) {
+    //     let imageURL = await getObjectSignedUrl(publication['images'][i].image_url);
+    //     publications.rows[index].images[i].image_url = imageURL
+    //   }
+    //   // console.log(index);
+    // })
+    // console.log(publications.rows);
+
     return publications
   }
 
@@ -131,21 +157,21 @@ class PublicationsServices {
               attributes: ['id', 'name']
             }
           },
-          {
-            model: models.Votes,
-            as: 'votes',
-            // include: {
-            //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
-            // }
-            // attributes: [
-            //   [literal(`(
-            //     SELECT COUNT(*)
-            //     FROM "votes" v 
-            //     WHERE v."publication_id" = "Publications"."id"
-            //   )`), 'count'],
-            //   'id','publication_id','user_id'
-            // ]
-          },
+          // {
+          // model: models.Votes,
+          // as: 'votes',
+          // include: {
+          //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
+          // }
+          // attributes: [
+          //   [literal(`(
+          //     SELECT COUNT(*)
+          //     FROM "votes" v 
+          //     WHERE v."publication_id" = "Publications"."id"
+          //   )`), 'count'],
+          //   'id','publication_id','user_id'
+          // ]
+          // },
         ]
       }
     )

@@ -8,8 +8,8 @@ const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('.
 class ImagesPublicationsService {
   constructor() { }
 
-  async publicationImagesExist(idPublication) {
-    const result = await models.Publications.findByPk(idPublication);
+  async publicationImagesExist(id) {
+    const result = await models.Publications.findByPk(id/*, { attributes: { include: ['id'] } } */);
 
     if (!result) throw new CustomError('Not found publications', 404, 'not found');
     return result
@@ -17,9 +17,9 @@ class ImagesPublicationsService {
 
   async createImage(image, idPublication, order) {
     const transaction = await models.sequelize.transaction();
-    const imageBody = { image_url: image, publication_id: idPublication, order }
+    const imageBody = { image_url: image, publication_id: idPublication, order: order }
     try {
-      let imageCreated = await models.Publications.create(
+      let imageCreated = await models.PublicationsImages.create(
         imageBody,
         { transaction }
       )
@@ -33,19 +33,16 @@ class ImagesPublicationsService {
     }
   }
 
+  async canUploadImages(idPublication) {
+    const result = models.PublicationsImages.findAll({ where: { publication_id: idPublication } });
+    if (!result.length < 3) throw new CustomError('Image limit', 400, 'Bad Request');
+    return result
+  }
+
   async updateOrderImages(order, publicationId) {
 
-    const publication = await models.Publications.findByPk(publicationId,
-      {
-        include: [
-          { model: models.PublicationsImages, as: 'images' },
-        ],
-      }
-    )
+    let images = await models.PublicationsImages.findAll({ where: { publication_id: publicationId } });
 
-    let images = publication.images;
-
-    // console.log(images);
     let actual_order = order.actual_order;
     let next_order = order.next_order;
 
@@ -57,37 +54,43 @@ class ImagesPublicationsService {
         next_index = i;
       }
     }
-    /*
-
-    // Eliminar los objetos con los valores de 'order' correspondientes
-    let actual_image = images.splice(actual_index, 1)[0];
-    let next_image = next_index > actual_index ? images.splice(next_index - 1, 1)[0] : images.splice(next_index, 1)[0];
-
-    // Insertar los objetos en el nuevo orden en los índices correctos en el array
-    images.splice(0, 0, actual_image);
-    images.splice(next_index > actual_index ? actual_index + 1 : next_index, 0, next_image);
-    */
-
-    if (!images[actual_index]) throw new CustomError(`Not found image in actual order ${actual_order}`, 404, 'not found');
-    if (!images[next_index]) throw new CustomError(`Not found image in next order ${next_order}`, 404, 'not found');
-    images[actual_index].order = next_order;
-    images[next_index].order = actual_order;
 
     images.sort((a, b) => a.order - b.order);
     const transaction = await models.sequelize.transaction();
     try {
-      await Promise.all(images.map(async (image) => {
+      if (!images[actual_index]) throw new CustomError(`Not found image in actual order ${actual_order}`, 404, 'not found');
+      if (!images[next_index]) throw new CustomError(`Not found image in next order ${next_order}`, 404, 'not found');
 
-        await models.PublicationsImages.updated(image, { transaction })
-      }));
+      [images[actual_index].order, images[next_index].order] = [images[next_index].order, images[actual_index].order];
 
-      await transaction.commit()
+      await Promise.all(images.map(image => image.save({ transaction })));
+      await transaction.commit();
       return images
     } catch (error) {
       await transaction.rollback()
       throw error
     }
+  }
 
+  async getImageOr404(order, idPublication) {
+    const images = models.PublicationsImages.findOne({ where: { publication_id: idPublication, order: order } })
+
+    if (!images) throw new CustomError(`Not found image in order ${order}`, 404, 'not found');
+    return images
+  }
+
+  async removeImage(idImage) {
+    const transaction = await models.sequelize.transaction()
+    try {
+      let image = await models.PublicationsImages.findByPk(idImage)
+      if (!image) throw new CustomError('Not found image', 404, 'Not Found')
+      await image.destroy({ transaction })
+      await transaction.commit()
+      return image
+    } catch (error) {
+      await transaction.rollback()
+      throw error
+    }
   }
 
 }

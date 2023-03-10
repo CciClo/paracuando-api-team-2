@@ -23,7 +23,52 @@ const multerPublicationsPhotos = multer({
   }
 })
 
+const multerUsersPhotos = multer({
+  dest: 'uploads/users/photos/',
+  limits: {
+    fileSize: 1050000, // 1 Mb
+  },
+  fileFilter: (request, file, cb) => {
+
+    request.on('aborted', () => {
+      file.stream.on('end', () => {
+        cb(new Error('Cancel Photo Upload'), false)
+      })
+      file.stream.emit('end')
+    })
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      cb(null, true)
+    } else {
+      cb(null, false)
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'))
+    }
+  }
+})
+
+const multerTagsPhotos = multer({
+  dest: 'uploads/tags/photos/',
+  limits: {
+    fileSize: 1050000, // 1 Mb
+  },
+  fileFilter: (request, file, cb) => {
+
+    request.on('aborted', () => {
+      file.stream.on('end', () => {
+        cb(new Error('Cancel Photo Upload'), false)
+      })
+      file.stream.emit('end')
+    })
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      cb(null, true)
+    } else {
+      cb(null, false)
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'))
+    }
+  }
+})
 
 module.exports = {
-  multerPublicationsPhotos
+  multerPublicationsPhotos,
+  multerUsersPhotos,
+  multerTagsPhotos
 }
