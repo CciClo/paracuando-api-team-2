@@ -3,6 +3,7 @@ const models = require('../database/models');
 const { Op } = require('sequelize');
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
+const { getObjectSignedUrl } = require('../libs/aws3');
 
 class UsersService {
   constructor() { }
@@ -98,6 +99,10 @@ class UsersService {
       raw: true,
     });
     if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    if (user['image_url']) {
+      let imageURL = await getObjectSignedUrl(user['image_url']);
+      user['image_url'] = imageURL
+    }
     return user;
   }
 
@@ -106,6 +111,10 @@ class UsersService {
       raw: true,
     });
     if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    if (user['image_url']) {
+      let imageURL = await getObjectSignedUrl(user['image_url']);
+      user['image_url'] = imageURL
+    }
     return user;
   }
 
