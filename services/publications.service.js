@@ -25,7 +25,6 @@ class PublicationsServices {
         {
           model: models.PublicationsTags,
           as: 'tags',
-          attributes: ['id'],
           include: {
             model: models.Tags,
             as: 'tag',
@@ -93,7 +92,7 @@ class PublicationsServices {
       }
 
       const responseTag = await publicationsTgsService.createWithBulk(tags)
-      const responseVote = await votesService.create({publication_id: publication.id, user_id: user.id})
+      const responseVote = await votesService.create({ publication_id: publication.id, user_id: user.id })
       return publication;
 
     } catch (error) {
@@ -154,7 +153,7 @@ class PublicationsServices {
     return result
   }
 
-  async removePublicationById (id) {
+  async removePublicationById(id) {
     const transaction = await models.sequelize.transaction()
     try {
       let publication = await models.Publications.findByPk(id,
