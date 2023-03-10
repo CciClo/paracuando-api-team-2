@@ -21,6 +21,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Publications_tags.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+      },
       tag_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
