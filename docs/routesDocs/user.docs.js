@@ -5,7 +5,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: For administrators only
+ *       summary: For administrators only, you do not need the query, but with them you could navigate ...
  *       tags:
  *         - User
  *       parameters:
@@ -17,10 +17,6 @@
  *           name: size
  *           type: integer
  *           example: 2
- *         - in: query
- *           name: created_at
- *           type: string
- *           example: 2023-02-27T22:06:54.904Z
  *       responses:
  *         200:
  *           description: Ok

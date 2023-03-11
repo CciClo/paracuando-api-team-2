@@ -3,7 +3,7 @@
  * paths:
  *   /api/v1/publications:
  *     get:
- *       summary: For all users
+ *       summary: Open to all users with or without token, you do not need the query, but with them you could navigate ...
  *       tags: 
  *         - Publications
  *       parameters:
@@ -23,7 +23,7 @@
  *               schema:
  *                 $ref: '#/components/schemas/responses/responseGetAllPublications'
  *     post:
- *       summary: For all users
+ *       summary: For all users, token required
  *       security:
  *         - bearerAuth: []
  *       tags: 
@@ -87,7 +87,7 @@
  *                    example: remove
  *   /api/v1/publications/{id}/vote:
  *     post:
- *       summary: Add a Vote in Publication
+ *       summary: For all users, token required
  *       tags:
  *         - Publications
  *       parameters:
@@ -206,7 +206,7 @@
  *                     example: not found
  *   /api/v1/publications/{id}/remove-image/{order}:
  *     delete:
- *       summary: Delete an image in publication
+ *       summary: Delete an image in publication, for all users, token required
  *       tags:
  *         - Publications
  *       parameters:
