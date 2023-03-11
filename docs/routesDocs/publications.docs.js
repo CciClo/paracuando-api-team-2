@@ -66,7 +66,7 @@
  *     delete:
  *       security:
  *         - bearerAuth: []
- *       summary: For all users
+ *       summary: Delete publication, for all users, token required
  *       tags:
  *         - Publications
  *       parameters:
@@ -87,6 +87,8 @@
  *                    example: remove
  *   /api/v1/publications/{id}/vote:
  *     post:
+ *       security:
+ *         - bearerAuth: []
  *       summary: For all users, token required
  *       tags:
  *         - Publications
@@ -117,7 +119,9 @@
  *                   example: not found
  *   /api/v1/publications/{id}/add-image:
  *     post:
- *       summary: Add an image
+ *       security:
+ *         - bearerAuth: []
+ *       summary: Add an image, for all users, token required
  *       tags:
  *         - Publications
  *       parameters:
@@ -161,6 +165,8 @@
  *                     example: not found
  *   /api/v1/publications/{id}/image-order:
  *     put:
+ *       security:
+ *         - bearerAuth: []
  *       summary: Change order publication
  *       tags:
  *         - Publications
@@ -206,6 +212,8 @@
  *                     example: not found
  *   /api/v1/publications/{id}/remove-image/{order}:
  *     delete:
+ *       security:
+ *         - bearerAuth: []
  *       summary: Delete an image in publication, for all users, token required
  *       tags:
  *         - Publications
