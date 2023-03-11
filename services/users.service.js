@@ -3,6 +3,7 @@ const models = require('../database/models');
 const { Op } = require('sequelize');
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
+const { getObjectSignedUrl } = require('../libs/aws3');
 
 class UsersService {
   constructor() { }
@@ -98,6 +99,10 @@ class UsersService {
       raw: true,
     });
     if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    if (user['image_url']) {
+      let imageURL = await getObjectSignedUrl(user['image_url']);
+      user['image_url'] = imageURL
+    }
     return user;
   }
 
@@ -106,6 +111,10 @@ class UsersService {
       raw: true,
     });
     if (!user) throw new CustomError('Not found user', 404, 'Not found');
+    if (user['image_url']) {
+      let imageURL = await getObjectSignedUrl(user['image_url']);
+      user['image_url'] = imageURL
+    }
     return user;
   }
 
@@ -224,6 +233,42 @@ class UsersService {
       );
       await transaction.commit();
       return restoreUser;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  }
+
+  async addImage(image_url, idUser) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      let user = await models.Users.findByPk(idUser);
+      if (!user) throw new CustomError('Not found user', 404, 'Not Found');
+      const result = await user.update({ image_url: image_url }, { transaction });
+      await transaction.commit();
+      return result
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  }
+
+  async getImageOr404(idUser) {
+    const user = await models.Users.findOne({ where: { id: idUser }, attributes: { include: ['id', 'image_url'] } });
+    if (!user) throw new CustomError('Not found user', 404, 'Not Found');
+    if (!user.image_url) throw new CustomError('Not found image', 404, 'Not Found');
+    console.log(user);
+    return user
+  }
+
+  async removeImage(idUser) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      let user = await models.Users.findByPk(idUser);
+      if (!user) throw new CustomError('Not found user', 404, 'Not Found');
+      const result = await user.update({ image_url: null }, { transaction });
+      await transaction.commit();
+      return result;
     } catch (error) {
       await transaction.rollback();
       throw error;

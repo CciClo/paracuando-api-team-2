@@ -1,35 +1,29 @@
-"use strict";
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("users_tags", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
+    await queryInterface.createTable('users_tags', {
       tag_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         foreignKey: true,
         references: {
-          model: "tags",
-          key: "id",
+          model: 'tags',
+          key: 'id',
         },
-        onUpdate: "CASCADE",
-        onDelete: "RESTRICT",
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       user_id: {
         type: Sequelize.UUID,
         allowNull: false,
         foreignKey: true,
         references: {
-          model: "users",
-          key: "id",
+          model: 'users',
+          key: 'id',
         },
-        onUpdate: "CASCADE",
-        onDelete: "RESTRICT",
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("users_tags");
+    await queryInterface.dropTable('users_tags');
   },
 };

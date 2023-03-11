@@ -1,12 +1,19 @@
 'use strict';
+const sharp = require('sharp');
+const { uploadFile, deleteFile } = require('../libs/aws3');
 const PublicationsServices = require('../services/publications.service');
 const UsersService = require('../services/users.service');
 const VotesServices = require('../services/votes.service');
+const uuid = require('uuid');
+const fs = require('fs');
+const util = require('util');
 const {
   getPagination,
   getPagingData,
   CustomError,
 } = require('../utils/helpers');
+
+const unlinkFile = util.promisify(fs.unlink);
 
 const votesService = new VotesServices();
 const publicationsService = new PublicationsServices();
@@ -102,10 +109,61 @@ const getUserAllPublications = async (request, response, next) => {
   }
 };
 
+const uploadImageUser = async (request, response, next) => {
+  try {
+    const { id: idUser } = request.params
+    const files = request.files;
+    const { isSameUser } = request.user;
+    if (isSameUser) {
+      if (files.length && files.length < 2) {
+        let imagesKeys = []
+        await Promise.all(files.map(async (file) => {
+          const idImage = uuid.v4()
+          let imageName = `user-image-${idUser}-${idImage}`
+          const fileResize = await sharp(file.path)
+            .resize({ height: 1920, width: 1080, fit: 'contain' })
+            .toBuffer()
+          await uploadFile(fileResize, imageName, file.mimetype)
+          let newImageUser = await usersService.addImage(imageName, idUser)
+          imagesKeys.push(newImageUser.image_url)
+        }))
+        await Promise.all(files.map(async (file) => {
+          await unlinkFile(file.path)
+        }))
+        return response.json({ results: { message: 'Image Added', images: imagesKeys } })
+      }
+    }
+
+    throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized'
+    );
+  } catch (error) {
+    next(error)
+  }
+}
+
+const removeImageUser = async (request, response, next) => {
+  try {
+    const { isAdmin, isSameUser } = request.user;
+    const { id } = request.params;
+    if (isAdmin || isSameUser) {
+      let imageUser = await usersService.getImageOr404(id);
+      await deleteFile(imageUser.image_url);
+      await usersService.removeImage(imageUser.id);
+      return response.status(200).json({ message: 'Image Removed' });
+    }
+    throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized');
+  } catch (error) {
+    next(error)
+  }
+
+}
+
 module.exports = {
   getAllUserAdmin,
   findUserById,
   updateUserById,
   getUserAllVotes,
   getUserAllPublications,
+  uploadImageUser,
+  removeImageUser,
 };

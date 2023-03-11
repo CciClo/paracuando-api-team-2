@@ -4,7 +4,7 @@ const models = require('../database/models');
 const { CustomError } = require('../utils/helpers');
 
 class VotesServices {
-  constructor () {}
+  constructor() { }
 
   async findAndCount(query) {
     const options = {
@@ -34,14 +34,14 @@ class VotesServices {
     return votes;
   }
 
-  async verifyVote (publication_id, user_id) {
-    let vote = await models.Votes.findOne({where: {publication_id, user_id},});
-    if(!vote){ await this.create({publication_id, user_id}); return {message: 'Vote added'} }
+  async verifyVote(publication_id, user_id) {
+    let vote = await models.Votes.findOne({ where: { publication_id, user_id }, });
+    if (!vote) { await this.create({ publication_id, user_id }); return { message: 'Vote added' } }
     await this.removeVote(vote.id);
-    return {message: 'Vote removed'};
+    return { message: 'Vote removed' };
   }
 
-  async create (object) {
+  async create(object) {
     const transaction = await models.sequelize.transaction();
     object.id = uuid4();
 

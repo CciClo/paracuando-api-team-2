@@ -6,7 +6,8 @@ const createPublicationSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
   content: Joi.string().required(),
-  tags: Joi.array().required()
+  tags: Joi.array().required(),
+  // images: Joi.array().min(1).max(3).required(),
 })
 
 module.exports = {

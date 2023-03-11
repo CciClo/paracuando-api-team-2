@@ -6,12 +6,15 @@ const {
   getAllUserAdmin,
   getUserAllVotes,
   getUserAllPublications,
+  uploadImageUser,
+  removeImageUser,
 } = require('../controllers/users.controller');
 const {
   createUserTag,
   removeUserTag,
 } = require('../controllers/usersTags.controller');
 const { checkRole } = require('../middlewares/checkRole');
+const { multerUsersPhotos } = require('../middlewares/multer.middleware');
 const {
   verifyTheSameUser,
 } = require('../middlewares/verifyTheSameUser.middleware');
@@ -66,5 +69,19 @@ router.delete(
   verifyTheSameUser,
   removeUserTag
 );
+
+router.post('/:id/add-image',
+  passport.authenticate('jwt', { session: false }),
+  verifyTheSameUser,
+  multerUsersPhotos.array('image', 1),
+  uploadImageUser
+);
+
+router.delete('/:id/remove-image',
+  passport.authenticate('jwt', { session: false }),
+  verifyTheSameUser,
+  checkRole,
+  removeImageUser,
+)
 
 module.exports = router;
