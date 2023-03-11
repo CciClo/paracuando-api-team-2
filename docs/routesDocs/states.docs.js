@@ -4,7 +4,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Only users for Administrators
+ *     summary: For all users, token is required
  *     tags:
  *       - States
  *     parameters:
