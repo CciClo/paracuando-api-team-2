@@ -37,7 +37,7 @@ class VotesServices {
   async verifyVote(publication_id, user_id) {
     let vote = await models.Votes.findOne({ where: { publication_id, user_id }, });
     if (!vote) { await this.create({ publication_id, user_id }); return { message: 'Vote added' } }
-    await this.removeVote(vote.id);
+    await this.removeVote(publication_id, user_id);
     return { message: 'Vote removed' };
   }
 
@@ -58,10 +58,10 @@ class VotesServices {
     }
   }
 
-  async removeVote(id) {
+  async removeVote(publication_id, user_id) {
     const transaction = await models.sequelize.transaction()
     try {
-      let vote = await models.Votes.findByPk(id)
+      let vote = await models.Votes.findOne({ where: { publication_id, user_id }, });
 
       if (!vote) throw new CustomError('Not found vote', 404, 'Not Found')
 
