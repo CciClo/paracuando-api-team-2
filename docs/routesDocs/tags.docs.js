@@ -144,18 +144,18 @@
  *         - in: path
  *           name: id
  *           type: integer revisar
- *           example: que ira acá
+ *           example: id
  *       requestBody:
- *         description:
- *           required: true
- *           content:
- *             application/json:
- *               schema:
+ *         description: Images as form data
+ *         content:
+ *           multipart/form-data:
+ *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: binary
- *                   example: url image xx revisar
+ *                 image:
+ *                   type: string
+ *                   format: binary
+ *                   description: Image
  *       responses:
  *         201:
  *           description: Ok

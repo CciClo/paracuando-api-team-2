@@ -126,16 +126,18 @@
  *           type: string
  *           example: f7bc4e56-3cdb-41da-8751-909c35caad9b
  *       requestBody:
- *         description: Image
- *         required: true
+ *         description: Images as form data
  *         content:
- *           application/json:
+ *           multipart/form-data:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: binary
- *                   example: imag1, img2, img3
+ *                 images: 
+ *                   type: array
+ *                   items:
+ *                     oneOf:
+ *                     - type: file
+ *                       format: binary
  *       responses:
  *         201:
  *           description: Ok
@@ -161,7 +163,7 @@
  *     put:
  *       summary: Change order publication
  *       tags:
- *         - Publications:
+ *         - Publications
  *       parameters:
  *         - in: path
  *           name: id
@@ -175,9 +177,12 @@
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 actual_order:
  *                   type: string
- *                   example: xx actual order y siguiente order
+ *                   example: 1
+ *                 next_order:
+ *                   type: string
+ *                   example: 2
  *       responses:
  *         201:
  *           description: Ok
@@ -203,34 +208,35 @@
  *     delete:
  *       summary: Delete an image in publication
  *       tags:
- *         - Publications:
+ *         - Publications
  *       parameters:
  *         - in: path
+ *           required: true
  *           name: id
  *           type: string
- *           example: f7bc4e56-3cdb-41da-8751-909c35caad9b
  *         - in: path
+ *           required: true
  *           name: order
  *           type: string
- *           example: xx
  *       responses:
  *         200:
  *           description: Ok
  *           content:
  *             application/json:
  *               schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Image removed
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Image removed
  *         400:
  *           description: Not found
  *           content:
  *             application/json:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: not found
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: not found
  */
