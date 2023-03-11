@@ -30,6 +30,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -61,6 +62,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -99,6 +101,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -139,6 +142,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -179,6 +183,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -221,6 +226,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -261,6 +267,7 @@
  *     post:
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -281,6 +288,7 @@
  *     delete:
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
