@@ -4,7 +4,7 @@ const { Op } = require('sequelize')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
 
     const tags = [
@@ -97,18 +97,23 @@ module.exports = {
     }
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
 
     const states = [
-      'adventure',
+      'adventure', 'Ropa y accesorios',
+      'Deportes', 'Conciertos',
+      'Meet & Greet', 'E-sport',
+      'Pop / Rock', 'Tecnoligia',
+      'Hogar y Decoracion', 'Abastecimiento',
+      'Video Games',
     ]
 
     try {
       await queryInterface.bulkDelete(
-        'users',
+        'tags',
         {
-          username: {
+          name: {
             [Op.or]: states,
           },
         },

@@ -10,7 +10,7 @@ const citiesService = new CitiesService();
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
 
     const user1 = await usersService.findUserByEmailOr404('tato.tandioy@gmail.com');
@@ -46,7 +46,7 @@ module.exports = {
 
     try {
 
-      await queryInterface.bulkInsert('publications', publications, {transaction})
+      await queryInterface.bulkInsert('publications', publications, { transaction })
       await transaction.commit()
     } catch (error) {
       await transaction.commit()
@@ -54,7 +54,7 @@ module.exports = {
     }
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
 
     const publications = [
@@ -66,7 +66,7 @@ module.exports = {
       await queryInterface.bulkDelete(
         'publications',
         {
-          name: {
+          title: {
             [Op.or]: publications,
           },
         },

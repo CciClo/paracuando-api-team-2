@@ -17,13 +17,19 @@ module.exports = (sequelize, DataTypes) => {
     }
     publications_images.init(
         {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+                allowNull: false
+            },
             publication_id: DataTypes.UUID,
             image_url: DataTypes.STRING,
             order: DataTypes.INTEGER,
         },
         {
             sequelize,
-            modelName: 'publications_images',
+            modelName: 'PublicationsImages',
             tableName: 'publications_images',
             underscored: true,
             timestamps: true,

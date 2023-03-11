@@ -1,6 +1,7 @@
 const { Op, cast, literal } = require('sequelize');
 const { v4: uuid4 } = require('uuid');
 const models = require('../database/models');
+const { getObjectSignedUrl } = require('../libs/aws3');
 const { CustomError } = require('../utils/helpers');
 const PublicationsTgsServices = require('./publicationsTags.service');
 const VotesServices = require('./votes.service');
@@ -11,7 +12,7 @@ const votesService = new VotesServices()
 class PublicationsServices {
   constructor() { }
 
-  async getAllPublications(query) {
+  async findAndCount(query) {
 
     const options = {
       where: {},
@@ -25,13 +26,19 @@ class PublicationsServices {
         {
           model: models.PublicationsTags,
           as: 'tags',
-          attributes: ['id'],
           include: {
             model: models.Tags,
             as: 'tag',
             attributes: ['id', 'name']
           }
         },
+        {
+          model: models.PublicationsImages,
+          as: 'images',
+          attributes: {
+            exclude: 'id' // temporal exclude, deleted necessary
+          }
+        }
       ]
     }
 
@@ -46,15 +53,43 @@ class PublicationsServices {
       options.where.id = id
     }
 
-    const { name } = query
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` }
+    const { user_id } = query
+    if (user_id) {
+      options.where.user_id = user_id
+    }
+
+    const { title } = query
+    if (title) {
+      options.where.title = { [Op.iLike]: `%${title}%` }
+    }
+
+    const { created_at } = query;
+    if (created_at) {
+      options.where.created_at = { [Op.iLike]: `%${created_at}%` };
     }
 
     options.distinct = true
 
     const publications = await models.Publications.scope('view_public').findAndCountAll(options);
     if (!publications) throw new CustomError('Not found publications', 404, 'not found')
+
+    await Promise.all(
+      publications.rows.map(async (publication, index) => {
+        for (let i = 0; i < publication['images'].length; i++) {
+          let imageURL = await getObjectSignedUrl(publication['images'][i].image_url);
+          publications.rows[index].images[i].image_url = imageURL
+        }
+      })
+    )
+    // publications.rows.map(async (publication, index) => {
+    //   for (let i = 0; i < publication['images'].length; i++) {
+    //     let imageURL = await getObjectSignedUrl(publication['images'][i].image_url);
+    //     publications.rows[index].images[i].image_url = imageURL
+    //   }
+    //   // console.log(index);
+    // })
+    // console.log(publications.rows);
+
     return publications
   }
 
@@ -83,7 +118,7 @@ class PublicationsServices {
       }
 
       const responseTag = await publicationsTgsService.createWithBulk(tags)
-      const responseVote = await votesService.create({publication_id: publication.id, user_id: user.id})
+      const responseVote = await votesService.create({ publication_id: publication.id, user_id: user.id })
       return publication;
 
     } catch (error) {
@@ -122,21 +157,21 @@ class PublicationsServices {
               attributes: ['id', 'name']
             }
           },
-          {
-            model: models.Votes,
-            as: 'votes',
-            // include: {
-            //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
-            // }
-            // attributes: [
-            //   [literal(`(
-            //     SELECT COUNT(*)
-            //     FROM "votes" v 
-            //     WHERE v."publication_id" = "Publications"."id"
-            //   )`), 'count'],
-            //   'id','publication_id','user_id'
-            // ]
-          },
+          // {
+          // model: models.Votes,
+          // as: 'votes',
+          // include: {
+          //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
+          // }
+          // attributes: [
+          //   [literal(`(
+          //     SELECT COUNT(*)
+          //     FROM "votes" v 
+          //     WHERE v."publication_id" = "Publications"."id"
+          //   )`), 'count'],
+          //   'id','publication_id','user_id'
+          // ]
+          // },
         ]
       }
     )
@@ -144,7 +179,7 @@ class PublicationsServices {
     return result
   }
 
-  async removePublicationById (id) {
+  async removePublicationById(id) {
     const transaction = await models.sequelize.transaction()
     try {
       let publication = await models.Publications.findByPk(id,

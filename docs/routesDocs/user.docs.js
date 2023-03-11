@@ -177,5 +177,89 @@
  *                   message:
  *                     type: string
  *                     example: Not Found id publications
+ *   /api/v1/users/:id/add-interest:
+ *     post:
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *         - User
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           type: string
+ *           example: bde48768-31dc-4e1e-a298-fbb115a65feb
+ *       requestBody:
+ *         description: Fields are needed to do the task
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 tag_id:
+ *                   type: integer
+ *                   example: 2
+ *       responses:
+ *         201:
+ *           description: Ok
+ *           content: 
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Interest Added
+ *         400:
+ *           description: Not Found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Unable to complete Review fields
+ *   /api/v1/users/remove-interest:
+ *     delete:
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *         - User
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           type: string
+ *           example: bde48768-31dc-4e1e-a298-fbb115a65feb
+ *       requestBody:
+ *         description: Fields are needed to do the task
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 tag_id:
+ *                   type: integer
+ *                   example: 1
+ *       responses:
+ *         201:
+ *           description: Ok
+ *           content: 
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Interest removed
+ *         400:
+ *           description: Not Found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Unable to complete Review fields
  */
 

@@ -2,13 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('publications_tags', {
-      id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true
-      },
+    await queryInterface.createTable('users_tags', {
       tag_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -20,28 +14,28 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      publication_id: {
+      user_id: {
         type: Sequelize.UUID,
         allowNull: false,
         foreignKey: true,
         references: {
-          model: 'publications',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('publications_tags');
+    await queryInterface.dropTable('users_tags');
   },
 };

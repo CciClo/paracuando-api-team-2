@@ -1,11 +1,10 @@
 const models = require('../database/models');
 
 class PublicationsTgsServices {
-  constructor () {}
+  constructor() { }
 
-  async createWithBulk (body) {
+  async createWithBulk(body) {
     const transaction = await models.sequelize.transaction();
-    console.log(body);
 
     try {
       let publicationTag = await models.PublicationsTags.bulkCreate(
