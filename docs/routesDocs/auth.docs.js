@@ -58,13 +58,6 @@
  *     summary: get the profiles associated with the user's account
  *     tags:
  *       - Auth
- *     requestBody:
- *       description: Required fields for the user to login
- *       required: true
- *       content:
- *         application/json:
- *           schema: 
- *             $ref: '#/components/schema/meGet'
  *     responses:
  *       200:
  *         description: OK

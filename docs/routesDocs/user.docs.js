@@ -5,7 +5,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: For administrators only
+ *       summary: For administrators only, you do not need the query, but with them you could navigate ...
  *       tags:
  *         - User
  *       parameters:
@@ -17,10 +17,6 @@
  *           name: size
  *           type: integer
  *           example: 2
- *         - in: query
- *           name: created_at
- *           type: string
- *           example: 2023-02-27T22:06:54.904Z
  *       responses:
  *         200:
  *           description: Ok
@@ -34,6 +30,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -65,6 +62,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -103,6 +101,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -143,6 +142,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -183,6 +183,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -225,6 +226,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -265,6 +267,7 @@
  *     post:
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id
@@ -285,6 +288,7 @@
  *     delete:
  *       tags:
  *         - User
+ *       summary: For all users, token is required
  *       parameters:
  *         - in: path
  *           name: id

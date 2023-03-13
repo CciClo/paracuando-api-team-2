@@ -13,7 +13,7 @@ const getAllPublications = async (request, response, next) => {
     query.offset = offset;
     const publications = await publicationsService.findAndCount(query);
     const results = getPagingData(publications, page, limit)
-    response.json({ results })
+    response.json(results)
   } catch (error) {
     next(error)
   }
@@ -36,9 +36,9 @@ const getPublicationById = async (request, response, next) => {
   try {
     const { id } = request.params;
     const publication = await publicationsService.getPublicationById(id);
-    response.json({ result: publication })
+    response.json({ result: publication });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -53,7 +53,7 @@ const deletePublicationById = async (request, response, next) => {
     }
     throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized');
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 

@@ -5,7 +5,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: For all tokenized users
+ *       summary: For all users, token is required
  *       tags:
  *         - Publications Types
  *       parameters:
@@ -28,7 +28,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: For all tokenized users
+ *       summary: For all users, token is required
  *       tags:
  *         - Publications Types
  *       parameters:
@@ -58,7 +58,7 @@
  *         - bearerAuth: []
  *       tags:
  *         - Publications Types
- *       summary: For all tokenized users
+ *       summary: For administrators only
  *       parameters:
  *         - in: path
  *           name: id

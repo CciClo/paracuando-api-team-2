@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const { v4: uuid4 } = require('uuid');
 const models = require('../database/models');
+const { getObjectSignedUrl } = require('../libs/aws3');
 const { CustomError } = require('../utils/helpers');
 
 class TagsService {
@@ -30,8 +31,17 @@ class TagsService {
 
     options.distinct = true
 
-    const states = await models.Tags.findAndCountAll(options)
-    return states
+    const tags = await models.Tags.findAndCountAll(options)
+
+    await Promise.all(
+      tags.rows.map(async (tag, index) => {
+        if (tag['image_url']) {
+          let imageURL = await getObjectSignedUrl(tag.image_url);
+          tags.rows[index].image_url = imageURL
+        }
+      })
+    )
+    return tags
   }
 
   async createTag(body) {
@@ -51,8 +61,12 @@ class TagsService {
   }
 
   async getTagById(id) {
-    const result = models.Tags.findByPk(id);
+    const result = await models.Tags.findByPk(id, { raw: true });
     if (!result) throw new CustomError('Not found tag ', 404, 'Not found');
+    if (result.image_url) {
+      let imageURL = await getObjectSignedUrl(result.image_url);
+      result.image_url = imageURL
+    }
     return result;
   }
 

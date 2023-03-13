@@ -21,9 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       publication_id: {
         type: DataTypes.UUID,
+        primaryKey: true
       },
       user_id: {
         type: DataTypes.UUID,
+        primaryKey: true
       },
     },
     {

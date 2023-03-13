@@ -20,13 +20,11 @@ const uploadImagePublication = async (request, response, next) => {
   try {
 
     if (isAdmin || isSameUser) {
+      await imagesPublicationsService.publicationImagesExist(idPublication)
+      const limitImages = await imagesPublicationsService.canUploadImages(idPublication);
 
-      if (files.length) {
+      if (files.length && files.length < limitImages) {
         let imagesKeys = []
-        await imagesPublicationsService.publicationImagesExist(idPublication)
-        await imagesPublicationsService.canUploadImages(idPublication);
-        response.json({ message: 'esta' })
-
         let order = 1
         await Promise.all(files.map(async (file) => {
 
@@ -49,8 +47,11 @@ const uploadImagePublication = async (request, response, next) => {
           .status(200)
           .json({ results: { message: 'success upload', images: imagesKeys } });
 
-      } else {
-        throw new CustomError('Images were not received', 404, 'Not Found')
+      } else if (files.length > limitImages) {
+        throw new CustomError(`Maximum ${limitImages} images was expected`, 400, 'Bad Request Error');
+      }
+      else {
+        throw new CustomError('Images were not received', 404, 'Not Found');
       }
     }
 
@@ -69,11 +70,11 @@ const uploadImagePublication = async (request, response, next) => {
 const destroyImageByPublication = async (request, response, next) => {
   try {
     const { isAdmin, isSameUser } = request.user;
-    const { order, id } = request.params;
+    const { order, id: idPublication } = request.params;
     if (isAdmin || isSameUser) {
-      let imagePublication = await imagesPublicationsService.getImageOr404(order, id)
+      let imagePublication = await imagesPublicationsService.getImageOr404(order, idPublication)
       await deleteFile(imagePublication.image_url)
-      await imagesPublicationsService.removeImage(imagePublication.id)
+      await imagesPublicationsService.removeImage(imagePublication.publication_id, imagePublication.order)
       return response.status(200).json({ message: 'Image Deleted', idPublication: imagePublication.publication_id, image_order: imagePublication.order })
     }
     throw new CustomError('You are not authorized to make changes to this user', 403, 'Unauthorized');
