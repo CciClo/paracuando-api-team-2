@@ -12,7 +12,7 @@ class ImagesPublicationsService {
     const result = await models.Publications.findByPk(id/*, { attributes: { include: ['id'] } } */);
 
     if (!result) throw new CustomError('Not found publications', 404, 'not found');
-    return result
+    return result;
   }
 
   async createImage(image, idPublication, order) {
@@ -34,9 +34,9 @@ class ImagesPublicationsService {
   }
 
   async canUploadImages(idPublication) {
-    const result = models.PublicationsImages.findAll({ where: { publication_id: idPublication } });
-    if (!result.length < 3) throw new CustomError('Image limit', 400, 'Bad Request');
-    return result
+    const result = await models.PublicationsImages.findAll({ where: { publication_id: idPublication }, raw: true });
+    if (result.length > 3) throw new CustomError('Image limit', 400, 'Bad Request');
+    return (3 - result.length);
   }
 
   async updateOrderImages(order, publicationId) {
@@ -73,22 +73,22 @@ class ImagesPublicationsService {
   }
 
   async getImageOr404(order, idPublication) {
-    const images = models.PublicationsImages.findOne({ where: { publication_id: idPublication, order: order } })
+    const images = models.PublicationsImages.findOne({ where: { publication_id: idPublication, order: order } });
 
     if (!images) throw new CustomError(`Not found image in order ${order}`, 404, 'not found');
     return images
   }
 
-  async removeImage(idImage) {
+  async removeImage(idPublication, order) {
     const transaction = await models.sequelize.transaction()
     try {
-      let image = await models.PublicationsImages.findByPk(idImage)
-      if (!image) throw new CustomError('Not found image', 404, 'Not Found')
-      await image.destroy({ transaction })
-      await transaction.commit()
-      return image
+      let image = await models.PublicationsImages.findOne({ where: { publication_id: idPublication, order } });
+      if (!image) throw new CustomError('Not found image', 404, 'Not Found');
+      await image.destroy({ transaction });
+      await transaction.commit();
+      return image;
     } catch (error) {
-      await transaction.rollback()
+      await transaction.rollback();
       throw error
     }
   }
