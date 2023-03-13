@@ -7,6 +7,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         foreignKey: true,
+        primaryKey: true,
         references: {
           model: 'tags',
           key: 'id',
@@ -18,6 +19,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         foreignKey: true,
+        primaryKey: true,
         references: {
           model: 'users',
           key: 'id',
