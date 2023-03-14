@@ -1,6 +1,7 @@
 const { Op, cast, literal } = require('sequelize');
 const { v4: uuid4 } = require('uuid');
 const models = require('../database/models');
+const { getObjectSignedUrl } = require('../libs/aws3');
 const { CustomError } = require('../utils/helpers');
 const PublicationsTgsServices = require('./publicationsTags.service');
 const VotesServices = require('./votes.service');
@@ -11,7 +12,7 @@ const votesService = new VotesServices()
 class PublicationsServices {
   constructor() { }
 
-  async getAllPublications(query) {
+  async findAndCount(query) {
 
     const options = {
       where: {},
@@ -25,13 +26,19 @@ class PublicationsServices {
         {
           model: models.PublicationsTags,
           as: 'tags',
-          attributes: ['id'],
           include: {
             model: models.Tags,
             as: 'tag',
             attributes: ['id', 'name']
           }
         },
+        {
+          model: models.PublicationsImages,
+          as: 'images',
+          attributes: {
+            exclude: 'id' // temporal exclude, deleted necessary
+          }
+        }
       ]
     }
 
@@ -46,16 +53,39 @@ class PublicationsServices {
       options.where.id = id
     }
 
-    const { name } = query
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` }
+    const { user_id } = query
+    if (user_id) {
+      options.where.user_id = user_id
+    }
+
+    const { title } = query
+    if (title) {
+      options.where.title = { [Op.iLike]: `%${title}%` }
+    }
+
+    const { created_at } = query;
+    if (created_at) {
+      options.where.created_at = { [Op.iLike]: `%${created_at}%` };
     }
 
     options.distinct = true
 
-    const publications = await models.Publications.scope('view_public').findAndCountAll(options);
+    const publications = await models.Publications.scope('view_public').findAndCountAll(options, { raw: true });
     if (!publications) throw new CustomError('Not found publications', 404, 'not found')
-    return publications
+    let publicationsCopy = JSON.parse(JSON.stringify(publications));
+
+    await Promise.all(
+      publications.rows.map(async (publication, indexPublication) => {
+        await Promise.all(
+          publication.images.map(async (image, indexImage) => {
+            let imageUrl = await getObjectSignedUrl(image.image_url)
+            publicationsCopy.rows[indexPublication].images[indexImage].image_url = imageUrl
+          })
+        )
+      })
+    )
+
+    return publicationsCopy
   }
 
   async create(user, body) {
@@ -83,7 +113,7 @@ class PublicationsServices {
       }
 
       const responseTag = await publicationsTgsService.createWithBulk(tags)
-      const responseVote = await votesService.create({publication_id: publication.id, user_id: user.id})
+      const responseVote = await votesService.create({ publication_id: publication.id, user_id: user.id })
       return publication;
 
     } catch (error) {
@@ -115,7 +145,7 @@ class PublicationsServices {
           {
             model: models.PublicationsTags,
             as: 'tags',
-            attributes: ['id'],
+            // attributes: ['id'],
             include: {
               model: models.Tags,
               as: 'tag',
@@ -123,29 +153,42 @@ class PublicationsServices {
             }
           },
           {
-            model: models.Votes,
-            as: 'votes',
-            // include: {
-            //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
-            // }
-            // attributes: [
-            //   [literal(`(
-            //     SELECT COUNT(*)
-            //     FROM "votes" v 
-            //     WHERE v."publication_id" = "Publications"."id"
-            //   )`), 'count'],
-            //   'id','publication_id','user_id'
-            // ]
+            model: models.PublicationsImages,
+            as: 'images'
           },
+          // {
+          // model: models.Votes,
+          // as: 'votes',
+          // include: {
+          //   model: models.Users, as: 'user', attributes: ['id', 'first_name']
+          // }
+          // attributes: [
+          //   [literal(`(
+          //     SELECT COUNT(*)
+          //     FROM "votes" v 
+          //     WHERE v."publication_id" = "Publications"."id"
+          //   )`), 'count'],
+          //   'id','publication_id','user_id'
+          // ]
+          // },
         ]
       }
     )
     if (!result) throw new CustomError('Not found publication', 404, 'Not found');
-    return result
+    let resultCopy = JSON.parse(JSON.stringify(result));
+
+    await Promise.all(
+      result.images.map(async (image, indexImage) => {
+        let imageUrl = await getObjectSignedUrl(image.image_url);
+        resultCopy.images[indexImage].image_url = imageUrl;
+        console.log(imageUrl);
+      })
+    );
+    return resultCopy;
   }
 
-  async removePublicationById (id) {
-    const transaction = await models.sequelize.transaction()
+  async removePublicationById(id) {
+    const transaction = await models.sequelize.transaction();
     try {
       let publication = await models.Publications.findByPk(id,
         {
@@ -158,20 +201,20 @@ class PublicationsServices {
           ],
         }
       )
-      if (!publication) throw new CustomError('Not found publication', 404, 'Not Found')
+      if (!publication) throw new CustomError('Not found publication', 404, 'Not Found');
 
       // Eliminar todos los votos y tags asociados a la publicación
-      await Promise.all(publication.votes.map(async vote => await vote.destroy({ transaction })))
-      await Promise.all(publication.tags.map(async tag => await tag.destroy({ transaction })))
+      await Promise.all(publication.votes.map(async vote => await vote.destroy({ transaction })));
+      await Promise.all(publication.tags.map(async tag => await tag.destroy({ transaction })));
       // Eliminar la publicación
-      await publication.destroy({ transaction })
+      await publication.destroy({ transaction });
 
-      await transaction.commit()
+      await transaction.commit();
 
-      return publication
+      return publication;
     } catch (error) {
-      await transaction.rollback()
-      throw error
+      await transaction.rollback();
+      throw error;
     }
   }
 

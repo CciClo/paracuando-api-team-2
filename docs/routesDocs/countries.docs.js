@@ -4,7 +4,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: For all tokenized users
+ *     summary: For all users, token is required
  *     tags:
  *       - Countries
  *     parameters:

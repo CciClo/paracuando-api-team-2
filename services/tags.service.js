@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
-const {v4: uuid4} = require('uuid');
+const { v4: uuid4 } = require('uuid');
 const models = require('../database/models');
+const { getObjectSignedUrl } = require('../libs/aws3');
 const { CustomError } = require('../utils/helpers');
 
 class TagsService {
@@ -30,17 +31,23 @@ class TagsService {
 
     options.distinct = true
 
-    const states = await models.Tags.findAndCountAll(options)
-    return states
+    const tags = await models.Tags.findAndCountAll(options)
+
+    await Promise.all(
+      tags.rows.map(async (tag, index) => {
+        if (tag['image_url']) {
+          let imageURL = await getObjectSignedUrl(tag.image_url);
+          tags.rows[index].image_url = imageURL
+        }
+      })
+    )
+    return tags
   }
 
-  async createTag(body ) {
+  async createTag(body) {
     const transaction = await models.sequelize.transaction()
     try {
       body.id = uuid4()
-      //   body.created_at = new Date()
-      //   body.updated_at = new Date()
-      console.log(body);
 
       let newTag = await models.Tags.create(
         body, { transaction /*, fields: ['id','name', 'description', 'image_url'] */ })
@@ -54,8 +61,12 @@ class TagsService {
   }
 
   async getTagById(id) {
-    const result = models.Tags.findByPk(id);
-    if(!result) throw new CustomError('Not found tag ', 404, 'Not found');
+    const result = await models.Tags.findByPk(id, { raw: true });
+    if (!result) throw new CustomError('Not found tag ', 404, 'Not found');
+    if (result.image_url) {
+      let imageURL = await getObjectSignedUrl(result.image_url);
+      result.image_url = imageURL
+    }
     return result;
   }
 
@@ -63,8 +74,8 @@ class TagsService {
     const transaction = await models.sequelize.transaction();
     try {
       let result = await models.Tags.findByPk(id);
-      if(!result) throw new CustomError('Not found tag ', 404, 'Not found');
-      let updateResult = await result.update(body, {transaction})
+      if (!result) throw new CustomError('Not found tag ', 404, 'Not found');
+      let updateResult = await result.update(body, { transaction })
       await transaction.commit()
       return updateResult;
     } catch (error) {
@@ -84,6 +95,20 @@ class TagsService {
     } catch (error) {
       await transaction.rollback()
       throw error
+    }
+  }
+
+  async addImage(image_url, idTag) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      let tag = await models.Tags.findByPk(idTag);
+      if (!tag) throw new CustomError('Not found tag', 404, 'Not Found');
+      const result = await tag.update({ image_url: image_url }, { transaction });
+      await transaction.commit();
+      return result
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
   }
 

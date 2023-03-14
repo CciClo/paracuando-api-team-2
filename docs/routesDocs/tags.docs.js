@@ -111,7 +111,6 @@
  *                   message:
  *                     type: string
  *                     example: Success update
- *   /api/v1/tags/:id:
  *     delete:
  *       security:
  *        - bearerAuth: []
@@ -134,4 +133,48 @@
  *                   message:
  *                     type: string
  *                     example: Remove Tag
+ *   /api/v1/tags/{id}/add-image:
+ *     post:
+ *       security:
+ *         - bearerAuth: []
+ *       summary: Add an image in tags
+ *       tags:
+ *         - Tags
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           type: integer revisar
+ *           example: id
+ *       requestBody:
+ *         description: Images as form data
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image:
+ *                   type: string
+ *                   format: binary
+ *                   description: Image
+ *       responses:
+ *         201:
+ *           description: Ok
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Add image
+ *         400:
+ *           description: not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: not found
  */
