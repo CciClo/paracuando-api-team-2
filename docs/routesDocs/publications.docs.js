@@ -21,7 +21,7 @@
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/responses/responseGetAllPublications'
+ *                 $ref: '#/components/schemas/responseGetAllPublications'
  *     post:
  *       summary: For all users, token required
  *       security:
@@ -34,7 +34,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/requestBody/createPublication'
+ *               $ref: '#/components/schemas/createPublication'
  *       responses:
  *         201:
  *           description: Ok
@@ -62,7 +62,17 @@
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/responses/responseGetByIdPublication'
+ *                 $ref: '#/components/schemas/responseGetByIdPublication'
+ *         404:
+ *           description: Not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: not found publication
  *     delete:
  *       security:
  *         - bearerAuth: []
@@ -85,6 +95,16 @@
  *                  message:
  *                    type: strict
  *                    example: remove
+ *         404:
+ *           description: Not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: not found publication
  *   /api/v1/publications/{id}/vote:
  *     post:
  *       security:
@@ -108,15 +128,16 @@
  *                   message:
  *                     type: string
  *                     example: Vote add / removed
- *         400:
+ *         404:
  *           description: Not found
  *           content:
  *             application/json:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: not found
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: not found publication
  *   /api/v1/publications/{id}/add-image:
  *     post:
  *       security:
@@ -136,12 +157,12 @@
  *             schema:
  *               type: object
  *               properties:
- *                 images: 
+ *                 images:
  *                   type: array
  *                   items:
- *                     oneOf:
- *                     - type: file
- *                       format: binary
+ *                     type: string
+ *                     format: binary
+ *                   description: It is necessary to send a minimum of one image or a maximum of 3, if you exceed or miss images this will be sent
  *       responses:
  *         201:
  *           description: Ok
@@ -153,7 +174,7 @@
  *                   message:
  *                     type: string
  *                     example: Add image
- *         400:
+ *         404:
  *           description: not found
  *           content:
  *             application/json:
@@ -162,7 +183,17 @@
  *                 properties:
  *                   message:
  *                     type: string
- *                     example: not found
+ *                     example: not found publication
+ *         416:
+ *           description: when the user has reached the limit and can no longer upload images
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Limit of images reached
  *   /api/v1/publications/{id}/image-order:
  *     put:
  *       security:

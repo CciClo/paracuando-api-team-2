@@ -210,7 +210,7 @@
  *                   message:
  *                     type: string
  *                     example: Interest Added
- *         400:
+ *         404:
  *           description: Not Found
  *           content:
  *             application/json:
@@ -253,7 +253,7 @@
  *                   message:
  *                     type: string
  *                     example: Interest removed
- *         400:
+ *         404:
  *           description: Not Found
  *           content:
  *             application/json:

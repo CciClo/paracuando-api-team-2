@@ -2,9 +2,9 @@
  * @openapi
  * components:
  *   schemas:
- *     requestBody:
  * 
- *     responses:
+ * 
+ * 
  *       responseGetAllRoles:
  *         type: object
  *         properties:
