@@ -2,9 +2,11 @@
  * @openapi
  * components:
  *   schemas:
- *     requestBody:
  * 
- *     responses:
+ * 
+ * 
+ * 
+ * 
  *       responseGetAllCities:
  *         type: object
  *         properties:

@@ -35,7 +35,7 @@ class ImagesPublicationsService {
 
   async canUploadImages(idPublication) {
     const result = await models.PublicationsImages.findAll({ where: { publication_id: idPublication }, raw: true });
-    if (result.length > 3) throw new CustomError('Image limit', 400, 'Bad Request');
+    if (result.length > 3) throw new CustomError('Limit of images reached', 416, 'Request range not satisfiable');
     return (3 - result.length);
   }
 

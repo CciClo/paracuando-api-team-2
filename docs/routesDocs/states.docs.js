@@ -22,5 +22,5 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/responses/responseGetAllStates'
+ *               $ref: '#/components/schemas/responseGetAllStates'
  */
