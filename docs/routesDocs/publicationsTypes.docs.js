@@ -23,7 +23,7 @@
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/responses/responseGetAllPubliblicationsTypes'
+ *                 $ref: '#/components/schemas/responseGetAllPubliblicationsTypes'
  *   /api/v1/publications-types/{id}:
  *     get:
  *       security:
@@ -42,7 +42,7 @@
  *           content: 
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/responses/responseGetPublicationById'
+ *                 $ref: '#/components/schemas/responseGetPublicationById'
  *         404:
  *           description: Not Found
  *           content:
@@ -70,7 +70,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/requestBody/requestUpdatePublicationType'
+ *               $ref: '#/components/schemas/requestUpdatePublicationType'
  *       responses:
  *         200:
  *           description: Ok

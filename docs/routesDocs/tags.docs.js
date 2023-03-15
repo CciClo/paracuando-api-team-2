@@ -22,7 +22,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/responses/responseGetAllTags'
+ *               $ref: '#/components/schemas/responseGetAllTags'
  * /api/v1/tags/{id}:
  *   get:
  *     security:
@@ -69,7 +69,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/requestBody/createTag'
+ *               $ref: '#/components/schemas/createTag'
  *       responses:
  *         201:
  *           description: Ok
@@ -99,7 +99,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/requestBody/updateTag'
+ *               $ref: '#/components/schemas/updateTag'
  *       responses:
  *         201:
  *           description: Ok
@@ -167,7 +167,7 @@
  *                   message:
  *                     type: string
  *                     example: Add image
- *         400:
+ *         404:
  *           description: not found
  *           content:
  *             application/json:

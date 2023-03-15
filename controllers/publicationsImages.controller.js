@@ -48,7 +48,7 @@ const uploadImagePublication = async (request, response, next) => {
           .json({ results: { message: 'success upload', images: imagesKeys } });
 
       } else if (files.length > limitImages) {
-        throw new CustomError(`Maximum ${limitImages} images was expected`, 400, 'Bad Request Error');
+        throw new CustomError(`Maximum ${limitImages} images was expected`, 416, 'Bad Request range not satisfiable');
       }
       else {
         throw new CustomError('Images were not received', 404, 'Not Found');

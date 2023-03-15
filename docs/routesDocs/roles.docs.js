@@ -22,5 +22,5 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/responses/responseGetAllRoles'
+ *               $ref: '#/components/schemas/responseGetAllRoles'
  */
